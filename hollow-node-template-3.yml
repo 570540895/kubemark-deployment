@@ -4,7 +4,7 @@ metadata:
   name: hollow-node-zw-3
   namespace: kubemark
 spec:
-  replicas: 90
+  replicas: 350
   selector:
     matchLabels:
       type: hollow-node
@@ -100,36 +100,6 @@ spec:
           requests:
             cpu: 3m
             memory: 50M
-      - name: hollow-node-problem-detector
-        image: zhizuqiu/node-problem-detector:v0.8.13
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: NODE_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        command:
-        - /bin/sh
-        - -c
-        - /node-problem-detector --system-log-monitors=/config/kernel.monitor --apiserver-override="https://192.168.1.117:443?inClusterConfig=false&auth=/kubeconfig/npd.kubeconfig" --alsologtostderr 1>>/var/log/npd-$(NODE_NAME).log 2>&1
-        volumeMounts:
-        - name: kubeconfig-volume
-          mountPath: /kubeconfig
-          readOnly: true
-        - name: kernelmonitorconfig-volume
-          mountPath: /config
-          readOnly: true
-        - name: no-serviceaccount-access-to-real-master
-          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-          readOnly: true
-        - name: logs-volume
-          mountPath: /var/log
-        resources:
-          requests:
-            cpu: 4m
-            memory: 50M
-        securityContext:
-          privileged: true
       # Keep the pod running on unreachable node for 15 minutes.
       # This time should be sufficient for a VM reboot and should
       # avoid recreating a new hollow node.
