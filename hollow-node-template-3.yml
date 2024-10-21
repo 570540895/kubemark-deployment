@@ -17,8 +17,8 @@ spec:
         kubernetes.io/hostname: worker03
       initContainers:
       - name: init-inotify-limit
-        imagePullPolicy: IfNotPresent
         image: busybox:1.32
+        imagePullPolicy: IfNotPresent
         command: ['sysctl', '-w', 'fs.inotify.max_user_instances=1000']
         securityContext:
           privileged: true
