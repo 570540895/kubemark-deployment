@@ -4,6 +4,7 @@ metadata:
   name: hollow-node-zw-1
   namespace: kubemark
 spec:
+  serviceName: hollow-node
   replicas: 3
   selector:
     matchLabels:
