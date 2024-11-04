@@ -5,7 +5,7 @@ metadata:
   namespace: kubemark
 spec:
   serviceName: hollow-node
-  replicas: 10
+  replicas: 350
   selector:
     matchLabels:
       type: hollow-node
@@ -14,10 +14,6 @@ spec:
       labels:
         type: hollow-node
     spec:
-      hostAliases:
-      - ip: "10.200.88.230"
-        hostnames:
-        - "lb.kubesphere.local"
       nodeSelector:
         kubernetes.io/hostname: worker02
       initContainers:
@@ -61,8 +57,8 @@ spec:
           "/kubemark",
           "--morph=kubelet",
           "--name=$(NODE_NAME)",
-          "--extended-resources=nvidia.com/gpu=8,cpu=96,memory=48000Mi",
-          "--max-pods=150",
+          "--extended-resources=zhejianglab.com/gpu=8,cpu=96,memory=48000Mi",
+        "--max-pods=150",
           "--kubeconfig=/kubeconfig/kubelet.kubeconfig"
         ]
         volumeMounts:

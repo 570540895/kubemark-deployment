@@ -4,7 +4,8 @@ metadata:
   name: hollow-node-zw-1
   namespace: kubemark
 spec:
-  replicas: 3
+  serviceName: hollow-node
+  replicas: 350
   selector:
     matchLabels:
       type: hollow-node
@@ -13,10 +14,6 @@ spec:
       labels:
         type: hollow-node
     spec:
-      hostAliases:
-      - ip: "10.200.88.230"
-        hostnames:
-        - "lb.kubesphere.local" 
       nodeSelector:
         kubernetes.io/hostname: worker01
       initContainers:
