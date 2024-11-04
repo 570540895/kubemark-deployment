@@ -40,7 +40,7 @@ spec:
         emptyDir: {}
       containers:
       - name: hollow-kubelet
-        image: tobyzhou9408/kubemark:v1.23.17
+        image: sun/kubemark:v1.28.11
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 4194
