@@ -76,7 +76,7 @@ spec:
         securityContext:
           privileged: true
       - name: hollow-proxy
-        image: tobyzhou9408/kubemark:v1.23.17
+        image: sun/kubemark:v1.28.11
         imagePullPolicy: IfNotPresent
         env:
         - name: NODE_NAME
