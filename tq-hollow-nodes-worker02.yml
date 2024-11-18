@@ -5,7 +5,7 @@ metadata:
   namespace: kubemark
 spec:
   serviceName: hollow-node
-  replicas: 10
+  replicas: 260
   selector:
     matchLabels:
       type: hollow-node
@@ -63,7 +63,9 @@ spec:
           "--name=$(NODE_NAME)",
           "--extended-resources=nvidia.com/gpu=8,cpu=96,memory=48000Mi",
           "--max-pods=150",
-          "--kubeconfig=/kubeconfig/kubelet.kubeconfig"
+          "--kubeconfig=/kubeconfig/kubelet.kubeconfig",
+          "--use-host-image-service=false",
+          "--node-labels=alibaba.com/tq-gpu-count=8,alibaba.com/tq-gpu-driver=525.147.05,alibaba.com/tq-gpu-mem=34359738368,alibaba.com/tq-gpu-name=V100,alibaba.com/tq-gpu-hostname=$(NODE_NAME),alibaba.com/tq-node-hostname=$(NODE_NAME)"
         ]
         volumeMounts:
         - name: kubeconfig-volume
