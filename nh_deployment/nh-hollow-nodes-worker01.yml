@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hollow-node-zw-1
+  namespace: kubemark
+spec:
+  serviceName: hollow-node
+  replicas: 625
+  selector:
+    matchLabels:
+      type: hollow-node
+  template:
+    metadata:
+      labels:
+        type: hollow-node
+    spec:
+      # if use load balancer, host ip need to be added to hollow node
+      hostAliases:
+      - ip: "10.200.88.230"
+        hostnames:
+        - "lb.kubesphere.local"
+      nodeSelector:
+        kubernetes.io/hostname: worker01
+      initContainers:
+      - name: init-inotify-limit
+        image: busybox:1.32
+        imagePullPolicy: IfNotPresent
+        command: ['sysctl', '-w', 'fs.inotify.max_user_instances=1000']
+        securityContext:
+          privileged: true
+      volumes:
+      - name: kubeconfig-volume
+        secret:
+          secretName: kubeconfig
+      - name: kernelmonitorconfig-volume
+        configMap:
+          name: node-configmap
+      - name: logs-volume
+        hostPath:
+          path: /var/log
+      - name: containerd
+        hostPath:
+          path: /run/containerd
+      - name: no-serviceaccount-access-to-real-master
+        emptyDir: {}
+      containers:
+      - name: hollow-kubelet
+        image: tobyzhou9408/kubemark:v1.23.17
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 4194
+        - containerPort: 10250
+        - containerPort: 10255
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        command: [
+          "/go-runner",
+          "-log-file=/var/log/kubelet-$(NODE_NAME).log",
+          "/kubemark",
+          "--morph=kubelet",
+          "--name=$(NODE_NAME)",
+          "--extended-resources=zhejianglab.com/spu=8,cpu=96,memory=48000Mi",
+          "--max-pods=150",
+          "--kubeconfig=/kubeconfig/kubelet.kubeconfig",
+          "--use-host-image-service=false",
+          "--node-labels=alibaba.com/tq-gpu-count=8,alibaba.com/tq-gpu-driver=525.147.05,alibaba.com/tq-gpu-mem=34359738368,alibaba.com/tq-gpu-name=V100,alibaba.com/tq-gpu-hostname=$(NODE_NAME),alibaba.com/tq-node-hostname=$(NODE_NAME)"
+        ]
+        volumeMounts:
+        - name: kubeconfig-volume
+          mountPath: /kubeconfig
+          readOnly: true
+        - name: logs-volume
+          mountPath: /var/log
+        - name: containerd
+          mountPath: /run/containerd
+        resources:
+          requests:
+            cpu: 3m
+            memory: 50M
+        securityContext:
+          privileged: true
+      - name: hollow-proxy
+        image: tobyzhou9408/kubemark:v1.23.17
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        command: [
+          "/go-runner",
+          "-log-file=/var/log/kubeproxy-$(NODE_NAME).log",
+          "/kubemark",
+          "--morph=proxy",
+          "--name=$(NODE_NAME)",
+          "--kubeconfig=/kubeconfig/kubeproxy.kubeconfig",
+        ]
+        volumeMounts:
+        - name: kubeconfig-volume
+          mountPath: /kubeconfig
+          readOnly: true
+        - name: logs-volume
+          mountPath: /var/log
+        resources:
+          requests:
+            cpu: 3m
+            memory: 50M
+      # Keep the pod running on unreachable node for 15 minutes.
+      # This time should be sufficient for a VM reboot and should
+      # avoid recreating a new hollow node.
+      # See https://github.com/kubernetes/kubernetes/issues/67120 for context.
+      tolerations:
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 900
+ 
