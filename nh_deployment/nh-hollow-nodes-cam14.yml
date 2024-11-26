@@ -5,7 +5,7 @@ metadata:
   namespace: kubemark
 spec:
   serviceName: hollow-node
-  replicas: 625
+  replicas: 600
   selector:
     matchLabels:
       type: hollow-node
@@ -15,12 +15,12 @@ spec:
         type: hollow-node
     spec:
       # if use load balancer, host ip need to be added to hollow node
-      hostAliases:
-      - ip: "10.200.88.230"
-        hostnames:
-        - "lb.kubesphere.local"
+      #hostAliases:
+      #- ip: "10.200.88.230"
+      #  hostnames:
+      #  - "lb.kubesphere.local"
       nodeSelector:
-        kubernetes.io/hostname: worker01
+        kubernetes.io/hostname: cambrian14
       initContainers:
       - name: init-inotify-limit
         image: busybox:1.32
@@ -62,7 +62,7 @@ spec:
           "/kubemark",
           "--morph=kubelet",
           "--name=$(NODE_NAME)",
-          "--extended-resources=zhejianglab.com/spu=8,cpu=96,memory=48000Mi",
+          "--extended-resources=nvidia.com/gpu=8,cpu=96,memory=48000Mi",
           "--max-pods=150",
           "--kubeconfig=/kubeconfig/kubelet.kubeconfig",
           "--use-host-image-service=false",
