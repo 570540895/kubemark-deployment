@@ -20,7 +20,7 @@ spec:
       #  hostnames:
       #  - "lb.kubesphere.local"
       nodeSelector:
-        kubernetes.io/hostname: cambrian14
+        kubernetes.io/hostname: enf46
       initContainers:
       - name: init-inotify-limit
         image: busybox:1.32
