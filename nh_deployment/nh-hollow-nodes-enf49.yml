@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: hollow-node-zw-cam14
+  name: hollow-node-zw-enf49
   namespace: kubemark
 spec:
   serviceName: hollow-node
@@ -20,7 +20,7 @@ spec:
       #  hostnames:
       #  - "lb.kubesphere.local"
       nodeSelector:
-        kubernetes.io/hostname: cambrian14
+        kubernetes.io/hostname: enf49
       initContainers:
       - name: init-inotify-limit
         image: busybox:1.32

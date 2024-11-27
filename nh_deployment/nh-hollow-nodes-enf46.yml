@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: hollow-node-zw-1
+  name: hollow-node-zw-enf46
   namespace: kubemark
 spec:
   serviceName: hollow-node
@@ -66,7 +66,8 @@ spec:
           "--max-pods=150",
           "--kubeconfig=/kubeconfig/kubelet.kubeconfig",
           "--use-host-image-service=false",
-          "--node-labels=alibaba.com/tq-gpu-count=8,alibaba.com/tq-gpu-driver=525.147.05,alibaba.com/tq-gpu-mem=34359738368,alibaba.com/tq-gpu-name=V100,alibaba.com/tq-gpu-hostname=$(NODE_NAME),alibaba.com/tq-node-hostname=$(NODE_NAME)"
+          "--node-labels=dros.zjlab.io/clusterEnv=drosInCluster,dros.zjlab.io/spec=GPU_V100_32GB_ACK",
+          "--register-with-taints=dros.zjlab.io/jobOnly=:NoSchedule",
         ]
         volumeMounts:
         - name: kubeconfig-volume
@@ -78,7 +79,7 @@ spec:
           mountPath: /run/containerd
         resources:
           requests:
-            cpu: 3m
+            cpu: 20m
             memory: 50M
         securityContext:
           privileged: true
@@ -106,7 +107,7 @@ spec:
           mountPath: /var/log
         resources:
           requests:
-            cpu: 3m
+            cpu: 20m
             memory: 50M
       # Keep the pod running on unreachable node for 15 minutes.
       # This time should be sufficient for a VM reboot and should
