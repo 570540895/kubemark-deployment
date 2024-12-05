@@ -5,7 +5,7 @@ metadata:
   namespace: kubemark
 spec:
   serviceName: hollow-node
-  replicas: 600
+  replicas: 1250
   selector:
     matchLabels:
       type: hollow-node
@@ -21,13 +21,6 @@ spec:
       #  - "lb.kubesphere.local"
       nodeSelector:
         kubernetes.io/hostname: cambrian16
-      initContainers:
-      - name: init-inotify-limit
-        image: busybox:1.32
-        imagePullPolicy: IfNotPresent
-        command: ['sysctl', '-w', 'fs.inotify.max_user_instances=1000']
-        securityContext:
-          privileged: true
       volumes:
       - name: kubeconfig-volume
         secret:

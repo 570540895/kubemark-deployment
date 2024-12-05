@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: hollow-node-zw-cam14
+  name: hollow-node-zw-mxsrv007
   namespace: kubemark
 spec:
   serviceName: hollow-node
@@ -20,7 +20,7 @@ spec:
       #  hostnames:
       #  - "lb.kubesphere.local"
       nodeSelector:
-        kubernetes.io/hostname: cambrian14
+        kubernetes.io/hostname: mxsrv007
       volumes:
       - name: kubeconfig-volume
         secret:
@@ -55,11 +55,11 @@ spec:
           "/kubemark",
           "--morph=kubelet",
           "--name=$(NODE_NAME)",
-          "--extended-resources=nvidia.com/gpu=8,cpu=96,memory=48000Mi",
+          "--extended-resources=kunlunxin.com/xpu=8,cpu=96,memory=48000Mi",
           "--max-pods=150",
           "--kubeconfig=/kubeconfig/kubelet.kubeconfig",
           "--use-host-image-service=false",
-          "--node-labels=dros.zjlab.io/clusterEnv=drosInCluster,dros.zjlab.io/spec=GPU_V100_32GB_ACK",
+          "--node-labels=dros.zjlab.io/clusterEnv=drosInCluster,dros.zjlab.io/spec=XPU_V5000_96GB",
           "--register-with-taints=dros.zjlab.io/jobOnly=:NoSchedule",
         ]
         volumeMounts:
