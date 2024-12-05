@@ -21,13 +21,6 @@ spec:
       #  - "lb.kubesphere.local"
       nodeSelector:
         kubernetes.io/hostname: enf49
-      initContainers:
-      - name: init-inotify-limit
-        image: busybox:1.32
-        imagePullPolicy: IfNotPresent
-        command: ['sysctl', '-w', 'fs.inotify.max_user_instances=1000']
-        securityContext:
-          privileged: true
       volumes:
       - name: kubeconfig-volume
         secret:
@@ -45,7 +38,7 @@ spec:
         emptyDir: {}
       containers:
       - name: hollow-kubelet
-        image: tobyzhou9408/kubemark:v1.28.2
+        image: 10.200.88.239/admin/sun/kubemark:v3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 4194
@@ -84,7 +77,7 @@ spec:
         securityContext:
           privileged: true
       - name: hollow-proxy
-        image: tobyzhou9408/kubemark:v1.28.2
+        image: 10.200.88.239/admin/sun/kubemark:v3
         imagePullPolicy: IfNotPresent
         env:
         - name: NODE_NAME

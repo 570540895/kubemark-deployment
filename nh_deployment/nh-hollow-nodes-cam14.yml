@@ -38,7 +38,7 @@ spec:
         emptyDir: {}
       containers:
       - name: hollow-kubelet
-        image: tobyzhou9408/kubemark:v1.28.2
+        image: 10.200.88.239/admin/sun/kubemark:v3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 4194
@@ -77,7 +77,7 @@ spec:
         securityContext:
           privileged: true
       - name: hollow-proxy
-        image: tobyzhou9408/kubemark:v1.28.2
+        image: 10.200.88.239/admin/sun/kubemark:v3
         imagePullPolicy: IfNotPresent
         env:
         - name: NODE_NAME
