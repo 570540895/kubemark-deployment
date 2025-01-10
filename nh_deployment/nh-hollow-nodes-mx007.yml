@@ -5,7 +5,7 @@ metadata:
   namespace: kubemark
 spec:
   serviceName: hollow-node
-  replicas: 1250
+  replicas: 100
   selector:
     matchLabels:
       type: hollow-node

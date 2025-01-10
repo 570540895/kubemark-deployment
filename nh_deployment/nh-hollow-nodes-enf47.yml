@@ -5,7 +5,7 @@ metadata:
   namespace: kubemark
 spec:
   serviceName: hollow-node
-  replicas: 600
+  replicas: 1250
   selector:
     matchLabels:
       type: hollow-node
@@ -55,7 +55,7 @@ spec:
           "/kubemark",
           "--morph=kubelet",
           "--name=$(NODE_NAME)",
-          "--extended-resources=nvidia.com/gpu=8,cpu=96,memory=48000Mi",
+          "--extended-resources=nvidia.com/gpu=8,cpu=128,memory=48000Mi",
           "--max-pods=150",
           "--kubeconfig=/kubeconfig/kubelet.kubeconfig",
           "--use-host-image-service=false",
