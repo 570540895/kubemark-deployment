@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: hollow-node-zw-enf47
+  name: hollow-node-zw-mxsrv007
   namespace: kubemark
 spec:
   serviceName: hollow-node
-  replicas: 100
+  replicas: 500
   selector:
     matchLabels:
       type: hollow-node
@@ -20,7 +20,7 @@ spec:
       #  hostnames:
       #  - "lb.kubesphere.local"
       nodeSelector:
-        kubernetes.io/hostname: master02
+        kubernetes.io/hostname: mxsrv007
       volumes:
       - name: kubeconfig-volume
         secret:
@@ -50,12 +50,12 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         command: [
-          #"/go-runner",
-          #"-log-file=/var/log/kubelet-$(NODE_NAME).log",
+          "/go-runner",
+          "-log-file=/var/log/kubelet-$(NODE_NAME).log",
           "/kubemark",
           "--morph=kubelet",
           "--name=$(NODE_NAME)",
-          "--extended-resources=nvidia.com/gpu=8,cpu=128,memory=48000Mi",
+          "--extended-resources=nvidia.com/gpu=8,cpu=256,memory=96000Mi",
           "--max-pods=150",
           "--kubeconfig=/kubeconfig/kubelet.kubeconfig",
           "--use-host-image-service=false",
@@ -85,8 +85,8 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         command: [
-          #"/go-runner",
-          #"-log-file=/var/log/kubeproxy-$(NODE_NAME).log",
+          "/go-runner",
+          "-log-file=/var/log/kubeproxy-$(NODE_NAME).log",
           "/kubemark",
           "--morph=proxy",
           "--name=$(NODE_NAME)",

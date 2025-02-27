@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: hollow-node-zw-enf47
+  name: hollow-node-zw-enf48-ilu
   namespace: kubemark
 spec:
   serviceName: hollow-node
@@ -20,7 +20,7 @@ spec:
       #  hostnames:
       #  - "lb.kubesphere.local"
       nodeSelector:
-        kubernetes.io/hostname: master02
+        kubernetes.io/hostname: enf48
       volumes:
       - name: kubeconfig-volume
         secret:
@@ -50,16 +50,16 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         command: [
-          #"/go-runner",
-          #"-log-file=/var/log/kubelet-$(NODE_NAME).log",
+          "/go-runner",
+          "-log-file=/var/log/kubelet-$(NODE_NAME).log",
           "/kubemark",
           "--morph=kubelet",
           "--name=$(NODE_NAME)",
-          "--extended-resources=nvidia.com/gpu=8,cpu=128,memory=48000Mi",
+          "--extended-resources=iluvatar.ai/gpu=8,cpu=96,memory=48000Mi",
           "--max-pods=150",
           "--kubeconfig=/kubeconfig/kubelet.kubeconfig",
           "--use-host-image-service=false",
-          "--node-labels=dros.zjlab.io/clusterEnv=drosInCluster,dros.zjlab.io/spec=GPU_V100_32GB_ACK",
+          "--node-labels=dros.zjlab.io/clusterEnv=drosInCluster,dros.zjlab.io/spec=ILU_ZT666_64GB",
           "--register-with-taints=dros.zjlab.io/jobOnly=:NoSchedule",
         ]
         volumeMounts:
@@ -85,8 +85,8 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         command: [
-          #"/go-runner",
-          #"-log-file=/var/log/kubeproxy-$(NODE_NAME).log",
+          "/go-runner",
+          "-log-file=/var/log/kubeproxy-$(NODE_NAME).log",
           "/kubemark",
           "--morph=proxy",
           "--name=$(NODE_NAME)",
