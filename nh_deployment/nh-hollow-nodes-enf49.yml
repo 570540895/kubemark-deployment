@@ -5,7 +5,7 @@ metadata:
   namespace: kubemark
 spec:
   serviceName: hollow-node
-  replicas: 100
+  replicas: 375
   selector:
     matchLabels:
       type: hollow-node
@@ -20,7 +20,7 @@ spec:
       #  hostnames:
       #  - "lb.kubesphere.local"
       nodeSelector:
-        kubernetes.io/hostname: master03
+        kubernetes.io/hostname: enf49
       volumes:
       - name: kubeconfig-volume
         secret:
@@ -74,6 +74,9 @@ spec:
           requests:
             cpu: 20m
             memory: 50M
+          limits:
+            cpu: 20m
+            memory: 300M
         securityContext:
           privileged: true
       - name: hollow-proxy
@@ -91,6 +94,7 @@ spec:
           "--morph=proxy",
           "--name=$(NODE_NAME)",
           "--kubeconfig=/kubeconfig/kubeproxy.kubeconfig",
+          "--use-real-proxier=false",
         ]
         volumeMounts:
         - name: kubeconfig-volume
@@ -102,6 +106,9 @@ spec:
           requests:
             cpu: 20m
             memory: 50M
+          limits:
+            cpu: 20m
+            memory: 500M
       # Keep the pod running on unreachable node for 15 minutes.
       # This time should be sufficient for a VM reboot and should
       # avoid recreating a new hollow node.
